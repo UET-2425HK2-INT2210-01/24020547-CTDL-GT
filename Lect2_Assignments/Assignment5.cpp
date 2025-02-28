@@ -70,7 +70,7 @@ int main()
             q.pop();
         }
     }
-    q.print();
+    q.print();//Bài này đề yêu cầu là in ra stack là top to bottom, nhưng test của thầy lại in ngược lại là bottom to top ạ
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
