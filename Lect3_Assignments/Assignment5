@@ -1,0 +1,20 @@
+initialize stack()
+	input nothing
+	output nothing
+	new array[1];
+	head <- -1;
+	tail <- -1;
+
+push(n)
+	input data n
+	output nothing
+
+pop()
+	input nothing
+	output nothing
+	if(size==0) then return;
+	if(size==1) then
+		head <- -1;
+		tail <- -1;
+	else
+		tail <- tail-1;
