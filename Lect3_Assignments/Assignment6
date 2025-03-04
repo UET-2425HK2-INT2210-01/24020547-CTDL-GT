@@ -1,0 +1,42 @@
+Bài này thì head sẽ là bottom và tail là top ạ
+intialize node()
+	data;
+  	pointer next;
+	pointer previous;
+
+node constructor (value n)
+  	data <- n;
+  	node->next <- nullptr;
+	node->previous <- nullptr
+
+Initialize stack()
+  	head <- nullptr;
+  	tail <- nullptr;
+  	size <- 0;
+
+Push(n)
+  	input: data n
+  	output: nothing
+  	newnode = new node(n)
+  	if (size==0) then
+    		head <- newnode;
+    		tail <- head;
+  	else
+    		tail->next <- newnode;
+		newnode->previous <- tail; 
+    		tail<-newnode;
+Độ phức tạp: O(1)
+
+Pop()
+	  input: nothing
+	  output: nothing
+	  if(size==0) return;
+	  if(size==1)
+	    	delete head;
+	    	head <- nullptr;
+	    	tail <- nullptr;
+	  else
+	    	node*tmp <- tail;
+	    	tail <- tail->previous;
+	    	delete tmp;
+Độ phức tạp: O(1)
