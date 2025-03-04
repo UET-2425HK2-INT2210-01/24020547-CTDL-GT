@@ -1,26 +1,16 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <math.h>
-#include <iomanip>
-#include <set>
-using namespace std;
+Cách 1: Độ phức tạp: O(logn)
+Ans(n)
+    Input integer n
+    Output 2^n
+    If n=0 then return 1;
+    half = ans(n/2);
+    If n%2=0 then return half*half;
+    If n<0 then return half*half/2;
+    Else return half*half*2;
 
-int main()
-{
-    std::ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    int n;
-    cin >> n;
-    vector<long long> v(n + 1);
-    v[0] = 1;
-    for (int i = 1; i <= n; ++i) {
-        v[i] = v[i-1]*2;
-    }
-    if (n < 0) {
-        cout << 1 / v[n];
-    }
-    else {
-        cout << v[n];
-    }
+Cách 2: Độ phức tạp: O(1)
+Ans(n)
+    Input interger n
+    Output 2^n
+    if(n<0) then return 1/(1<<n);
+    else return 1 << n;
