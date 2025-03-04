@@ -1,0 +1,37 @@
+Bài này em định cài queue bằng mảng vòng
+
+intialize queue()
+  Input: Nothing
+  Ouptput : queue
+  new array[1];
+  front <- -1;
+  rear <- -1;
+
+enqueu(n, size)
+  Input: data n
+  Output: nothing
+  rear <- (rear + 1)%capacity;
+  If front == rear then
+    arrray = new array[capacity * 2];
+  If size == 0 then
+    array[rear] <- n;
+    front <- rear;
+  Else
+    array[rear] <- n;
+  size++;
+Độ phức tạp:
+  Nếu số phần tử không vượt quá capacity của mảng: O(1)
+  Nếu số phần tử vượt quá capacity của mảng: O(n)
+
+dequeu()
+  Input: nothing
+  Output: nothing
+  If(size == 0) return;
+  If(size==1) then
+    front <- -1;
+    rear <- -1;
+    size--;
+  else
+    front++;
+  size--;
+Độ phức tạp: O(1)
