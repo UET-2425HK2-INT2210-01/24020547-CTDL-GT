@@ -1,11 +1,11 @@
 Bài này em định cài queue bằng mảng vòng
 
 intialize queue()
-  Input: Nothing
-  Ouptput : queue
-  new array[1];
-  front <- -1;
-  rear <- -1;
+	Input: Nothing
+  	Ouptput : queue
+  	new array[1];
+  	front <- -1;
+  	rear <- -1;
 
 enqueu(n, size, capacity)
 	Input: data n
@@ -24,14 +24,13 @@ enqueu(n, size, capacity)
   Nếu số phần tử vượt quá capacity của mảng: O(n)
 
 dequeu()
-  Input: nothing
-  Output: nothing
-  If(size == 0) return;
-  If(size==1) then
-    front <- -1;
-    rear <- -1;
-    size--;
-  else
-    front++;
-  size--;
+	input nothing
+	output nothing
+	if(size==0) then return;
+	if(size==1) then
+		front <- -1;
+		rear <- -1;
+	else
+		rear <- (front + size)%capacity - 1;
+	size--;
 Độ phức tạp: O(1)
