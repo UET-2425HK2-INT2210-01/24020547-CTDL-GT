@@ -1,3 +1,4 @@
+Bài này em định cài stack bằng mảng vòng ạ
 initialize stack()
 	input nothing
 	output nothing
@@ -18,7 +19,8 @@ push(n)
     	array[rear] <- n;
   	size++;
 Độ phức tạp:
-
+  Nếu số phần tử không vượt quá capacity của mảng: O(1)
+  Nếu số phần tử vượt quá capacity của mảng: O(n)
 pop()
 	input nothing
 	output nothing
@@ -28,4 +30,5 @@ pop()
 		rear <- -1;
 	else
 		rear <- (front + size)%capacity - 1;
-			
+	size--;
+Độ phức tạp: O(1)
