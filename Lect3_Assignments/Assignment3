@@ -1,5 +1,5 @@
 Bài này em định cài queue bằng mảng vòng
-
+Trong đó thì front là phần tử ở đầu hàng, và rear là phần tử ở cuối hàng ạ
 intialize queue()
 	Input: Nothing
   	Ouptput : queue
