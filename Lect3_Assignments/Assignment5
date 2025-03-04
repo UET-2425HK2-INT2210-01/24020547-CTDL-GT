@@ -1,4 +1,4 @@
-Bài này em định cài stack bằng mảng vòng ạ
+Bài này em định cài stack bằng mảng vòng ạ, trong đó thì front tương ứng với bottom và rear tương ứng với top ạ.
 initialize stack()
 	input nothing
 	output nothing
