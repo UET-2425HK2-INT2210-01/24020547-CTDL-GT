@@ -1,0 +1,39 @@
+Bài này thì head sẽ là phần tử đầu và tail là phần tử cuối ạ
+intialize node()
+  data;
+  pointer next;
+
+node constructor (value n)
+  data <- n;
+  node->next<-nullptr;
+
+Initialize queue()
+  head <- nullptr;
+  tail <- nullptr;
+  size <- 0;
+
+Enqueue(n)
+  input: data n
+  output: nothing
+  newnode = new node(n)
+  if (size==0) then
+    head <- newnode;
+    tail <- head;
+  else
+    tail->next<-newnode;
+    tail<-newnode;
+Độ phức tạp: O(1)
+
+Dequeue()
+  input: nothing
+  output: nothing
+  if(size==0) return;
+  if(size==1)
+    delete head;
+    head <- nullptr;
+    tail <- nullptr;
+  else
+    node*tmp <- head;
+    head <- head->next;
+    delete tmp;
+Độ phức tạp: O(1)
