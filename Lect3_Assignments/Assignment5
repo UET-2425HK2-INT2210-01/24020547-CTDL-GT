@@ -2,19 +2,30 @@ initialize stack()
 	input nothing
 	output nothing
 	new array[1];
-	head <- -1;
-	tail <- -1;
+	front <- -1;
+	rear <- -1;
 
 push(n)
-	input data n
-	output nothing
+	Input: data n
+	Output: nothing
+  	If size == capacity then
+    		new newarray[capacity * 2];
+		for i <- 1 to size then
+			newarray[i] = array[(front+i)%capacity];
+	If size == 0 then
+    		front <- 0;
+	rear <- (rear + 1)%capacity;
+    	array[rear] <- n;
+  	size++;
+Độ phức tạp:
 
 pop()
 	input nothing
 	output nothing
 	if(size==0) then return;
 	if(size==1) then
-		head <- -1;
-		tail <- -1;
+		front <- -1;
+		rear <- -1;
 	else
-		tail <- tail-1;
+		rear <- (front + size)%capacity - 1;
+			
