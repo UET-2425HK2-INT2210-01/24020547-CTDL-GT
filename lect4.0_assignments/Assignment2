@@ -1,0 +1,90 @@
+#include <iostream>
+
+using namespace std;
+
+class node {
+public:
+    int data;
+    int prior;
+    node* next;
+    node* prev;
+    node(int value, int p) {
+        data = value;
+        prior = p;
+        next = nullptr;
+        prev = nullptr;
+    }
+};
+
+class linkedlist {
+public:
+    node* head;
+    int size = 0;
+    linkedlist() {
+        head = nullptr;
+    }
+    void enqueue(int x, int p) {
+        node* newnode = new node(x, p);
+        if (head == nullptr) {
+            head = newnode;
+        }
+        else {
+            node* tmp = head;
+            if (p >= head->prior) {
+                newnode->next = head;
+                head = newnode;
+            }
+            else {
+                while (tmp->next != nullptr && tmp->next->prior >= p) {
+                    tmp = tmp->next;
+                }
+                newnode->next = tmp->next;
+                newnode->prev = tmp;
+                tmp->next = newnode;
+                if (tmp->next != nullptr) {
+                    tmp->next->prev = newnode;
+                }
+            }
+        }
+        ++size;
+    }
+    void dequeue() {
+        node* tmp = head;
+        if (head == nullptr) {
+            return;
+        }
+        head = head->next;
+        if (head != nullptr) {
+            head->prev = nullptr;
+        }
+        delete tmp;
+        --size;
+    }
+    void print() {
+        node* tmp = head;
+        while (tmp != nullptr) {
+            cout << "(" << tmp->data << "," << tmp->prior << ");";
+            tmp = tmp->next;
+        }
+    }
+};
+
+int main()
+{
+    int t;
+    cin >> t;
+    linkedlist l;
+    while (t--) {
+        string s;
+        cin >> s;
+        if (s == "enqueue") {
+            int a, b;
+            cin >> a >> b;
+            l.enqueue(a, b);
+        }
+        if (s == "dequeue") {
+            l.dequeue();
+        }
+    }
+    l.print();
+}
