@@ -1,0 +1,91 @@
+#include <iostream>
+
+using namespace std;
+
+class node {
+public:
+    int data;
+    node* next;
+    node(int value) {
+        data = value;
+        next = nullptr;
+    }
+};
+
+class linkedlist {
+public:
+    node* head;
+    node* tail;
+    int size = 0;
+    linkedlist() {
+        head = nullptr;
+        tail = nullptr;
+    }
+    void append(int x) {
+        node*newnode = new node(x);
+        if (head == nullptr) {
+            head = newnode;
+            tail = newnode;
+        }
+        else {
+            tail->next = newnode;
+            tail = newnode;
+        }
+        ++size;
+    }
+    void search(int x) {
+        node* tmp = head;
+        int count = 0;
+        while (tmp!=nullptr) {
+            if (tmp->data == x) {
+                cout << count << "\n";
+                return;
+            }
+            tmp = tmp->next;
+            ++count;
+        }
+        cout << "NO\n";
+    }
+    void reverse() {
+        int *a = new int [size];
+        node* tmp = head;
+        int i = size - 1;
+        while (tmp!=nullptr) {
+            a[i] = tmp->data;
+            tmp = tmp->next;
+            --i;
+        }
+        tmp = head;
+        i = 0;
+        while (tmp != nullptr) {
+            tmp->data = a[i];
+            cout << a[i] << " ";
+            ++i;
+            tmp = tmp->next;
+        }
+    }
+};
+
+int main()
+{
+    int t;
+    cin >> t;
+    linkedlist l;
+    while (t--) {
+        string s;
+        cin >> s;
+        if (s == "append") {
+            int n;
+            cin >> n;
+            l.append(n);
+        }
+        if (s == "search") {
+            int n;
+            cin >> n;
+            l.search(n);
+        }
+        if (s == "reverse") {
+            l.reverse();
+        }
+    }
+}
