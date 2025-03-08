@@ -29,7 +29,7 @@ public:
     node* head;
     node* tail;
     int size = 0;
-    linkedlist() {
+    stack() {
         head = nullptr;
         tail = nullptr;
     }
