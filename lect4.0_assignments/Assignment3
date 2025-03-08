@@ -24,7 +24,7 @@ public:
     }
 };
 
-class linkedlist {
+class stack {
 public:
     node* head;
     node* tail;
@@ -82,7 +82,7 @@ int main()
 {
     while (1) {
         string s;
-        linkedlist l;
+        stack l;
         int size = 0, count = 0;
         cin >> s;
         for (int i = 0; i < s.size(); ++i) {
