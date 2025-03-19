@@ -1,0 +1,3 @@
+Hai tính chất mong muốn chính của hàm băm:
+1, Phân phối giá trị 1 cách đồng đều, giảm đụng độ giữa các value cùng key
+2, Tính toán nhanh => truy xuất dữ liệu hiệu quả
