@@ -1,0 +1,154 @@
+#include <iostream>
+
+using namespace std;
+
+class node {
+public:
+    int id;
+    string name;
+    string clas;
+    node* next;
+    node(int iddata, string namedata, string clasdata) {
+        id = iddata;
+        name = namedata;
+        clas = clasdata;
+        next = nullptr;
+    }
+};
+
+class studentlist {
+public:
+    node* head;
+    int size = 0;
+    studentlist() {
+        head = nullptr;
+    }
+    void insert(int id, string name, string clas) {
+        node* newnode = new node(id, name, clas);
+        if (head == nullptr) {
+            head = newnode;
+            ++size;
+            return;
+        }
+        if (id < head->id) {
+            newnode->next = head;
+            head = newnode;
+            ++size;
+            return;
+        }
+        node* tmp = head;
+        while (tmp->next != nullptr && id > tmp->next->id) {
+            tmp = tmp->next;
+        }
+        if (id == tmp->id) {
+            tmp->name = name;
+            tmp->clas = clas;
+            delete newnode;
+            return;
+        }
+        newnode->next = tmp->next;
+        tmp->next = newnode;
+        ++size;
+    }
+    void del(int id) {
+        node* tmp = head;
+        if (head == nullptr) {
+            return;
+        }
+        if (head->id == id) {
+            head = head->next;
+            delete tmp;
+            --size;
+            return;
+        }
+        while (tmp->next!=nullptr&&id != tmp->next->id) {
+            tmp = tmp->next;
+        }
+        if (tmp->next == nullptr) {
+            return;
+        }
+        node* deletenode = tmp->next;
+        tmp->next = tmp->next->next;
+        delete deletenode;
+        --size;
+    }
+    void infor(int id) {
+        node* tmp = head;
+        while (tmp!=nullptr&&tmp->id != id) {
+            tmp = tmp->next;
+        }
+        if (tmp == nullptr) {
+            cout << "NA,NA\n";
+        }
+        else {
+            cout << tmp->name << "," << tmp->clas << "\n";
+        }
+    }
+};
+
+int stringtoint(string s) {
+    int ans = 0;
+    for (int i = 0; i <s.size(); ++i) {
+        ans = ans * 10 + (s[i] - '0');
+    }
+    return ans;
+}
+
+void decodestring(string s, studentlist &l) {
+    int count = 0;
+    int phay1 = 0, phay2 = 0, endbracket = 0, beginbracket = 0;
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '(') {
+            count = i;
+            beginbracket = i;
+        }
+        if (s[i] == ',' && phay1 == 0) {
+            phay1 = i;
+        }
+        else if (s[i] == ',') {
+            phay2 = i;
+        }
+        if (s[i] == ')') {
+            endbracket = i;
+        }
+    }
+    string sid = "";
+    string name = "";
+    string clas = "";
+    if (beginbracket < phay1) {
+        for (int i = beginbracket + 1; i < phay1; ++i) {
+            sid += s[i];
+        }
+    }
+    else {
+        for (int i = beginbracket + 1; i < endbracket; ++i) {
+            sid += s[i];
+        }
+    }
+    int id = stringtoint(sid);
+    for (int i = phay1 + 1; i < phay2; ++i) {
+        name += s[i];
+    }
+    for (int i = phay2 + 1; i < endbracket; ++i) {
+        clas += s[i];
+    }
+    if(count==6&&s[0]=='I'){
+        l.insert(id, name, clas);
+    }
+    else if (count == 5) {
+        l.infor(id);
+    }
+    else if (count == 6) {
+        l.del(id);
+    }
+}
+
+int main()
+{
+    studentlist l;
+    while (1) {
+        string s;
+        cin >> s;
+        decodestring(s, l);
+    }
+}
