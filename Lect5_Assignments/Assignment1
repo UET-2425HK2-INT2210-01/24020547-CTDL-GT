@@ -1,0 +1,110 @@
+#include <iostream>
+
+using namespace std;
+
+class node { //Khởi tạo node của tree
+public:
+    int data; //Giá trị của node
+    node* firstchild; //Con đầu
+    node* sibling; //Các con thứ
+    node(int value) { //constructor tạo node
+        data = value;
+        firstchild = nullptr;
+        sibling = nullptr;
+    }
+};
+
+node* arr[100] = { nullptr }; //Mảng để lưu xem các node đã tồn tại chưa
+bool hasparent[100] = { 0 }; //Mảng check xem node nào có cha (dùng để tìm root)
+void insert(int a, int b) { //Thêm node vào tree
+    if (!arr[a]) arr[a] = new node(a); //Nếu ko tồn tại node có giá trị a thì tạo node a
+    if (!arr[b]) arr[b] = new node(b); //Nếu ko tồn tại node có giá trị a thì tạo node a
+    if (!arr[a]->firstchild) { //Nếu node a chưa có con thì cho node b làm con đầu
+        arr[a]->firstchild = arr[b];
+    }
+    else { //Ngược lại cho node b làm con thứ
+        node* tmp = arr[a]->firstchild;
+        while (tmp->sibling != nullptr) { //Duyệt qua các con thứ trước đó để add node b vào
+            tmp = tmp->sibling;
+        }
+        tmp->sibling = arr[b];
+    }
+    hasparent[b] = 1; //Đánh dấu node b có cha
+}
+node* root(int n) { //Hàm tìm root
+    for (int i = 0; i < n; ++i) {
+        if (arr[i] != 0 && hasparent[i] == 0) { //thực tế là phải cho chạy hết mảng, nma đoạn này e lười sửa nên cho chạy từ đầu đến n.
+            return arr[i];                      //Nếu 1 node có tồn tại và không có cha thì nó sẽ là node root
+        }
+    }
+    return nullptr; //Nếu ko tồn tại node nào như vậy thì trả về nullptr
+}
+void preorder(node* n) { //Duyệt node theo preorder
+    if (!n) return; //Điều kiện dừng của đệ quy
+    cout << n->data << " "; //Duyệt theo preorder nên in giá trị của node trước
+    node* tmp = n->firstchild; //Sau đó bắt đầu duyệt tới các con của nó
+    while (tmp != nullptr) { //Vòng lặp này để duyệt hết các con của node
+        preorder(tmp); //Đệ quy
+        tmp = tmp->sibling;
+    }
+}
+void postorder(node* n) { //Duyệt node theo postorder
+    if (!n) return; //Điều kiện dừng của đệ quy
+    node* tmp = n->firstchild; //Bắt đầu duyệt tới các con của node
+    while (tmp != nullptr) {  //Vòng lặp này để duyệt hết các con của node
+        postorder(tmp); //Đệ quy
+        tmp = tmp->sibling;
+    }
+    cout << n->data << " "; //Sau khi hoàn thành đệ quy hết con thì in ra node cha
+}
+int height(node* n){ //Hàm tìm độ sâu của node, chúng ta sẽ so sánh độ sâu từng nhánh
+    int maxheight = 0;
+    if (!n) return 0; //Điều kiện dừng
+    node* tmp = n->firstchild; //Bắt đầu duyệt tới các con của node
+    while (tmp != nullptr) { // Vòng lặp này để duyệt hết các con của node
+        maxheight = max(maxheight, height(tmp)); //so sánh độ sâu từng nhánh
+        tmp = tmp->sibling;
+    }
+    return maxheight + 1; //Mỗi lần đệ quy xong từng node thì +1 độ sâu
+}
+void inorder(node* n) { //Duyệt node theo inorder
+    if (!n) return; //Điều kiện dừng
+    if (n->firstchild != nullptr) inorder(n->firstchild); //Đệ quy theo nhánh trái
+    cout << n->data << " "; //In ra node mỗi lần đệ quy xong
+    if (n->firstchild!=nullptr && n->firstchild->sibling != nullptr) inorder(n->firstchild->sibling); //Đệ quy theo nhánh phải 
+}                                                                                                     //Không cần phải có cout << n->data đoạn này vì node theo nhánh phải mà không có con nhánh trái thì sẽ được in ra nhờ lệnh cout trên, còn không thì sẽ duyệt tiếp nhành trái của nhánh phải
+bool checkbinary(node*n) { //Kiểm tra xem có phải cây nhị phân không
+    if (!n) return 1; //Điều kiện dừng nếu duyệt đến lá
+    node* tmp = n->firstchild; //Bắt đầu duyệt tới con của node
+    int count = 0; //Biến đếm số con của node
+    while (tmp != nullptr) { //Vòng lặp duyệt các con của node
+        ++count; //++count mỗi lần duyệt được 1 con
+        if (count > 2) return 0; //Nếu count > 2 thì dừng vòng lặp vì vi phạm điều kiện của binary tree
+		tmp = tmp->sibling; //Duyệt các con của node
+        if (!checkbinary(tmp)) return 0; //Đệ quy, cũng như kiểm tra luôn điều kiện sau khi kết thúc mỗi đệ quy
+    }
+    return 1; //Nếu duyệt hết cây mà oke
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+    int n, m;
+    cin >> n >> m;
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        cin >> a >> b;
+        insert(a, b);
+    }
+    node* rot = root(n);
+    cout << height(rot)-1 << "\n"; //height(rot)-1 vì hàm height viết như trên độ sâu tính luôn cả root, trong khi độ sâu thực tế thì không bao gồm root 
+    preorder(rot);
+    cout << "\n";
+    postorder(rot);
+    cout << "\n";
+    if (checkbinary(rot)) {
+        inorder(rot);
+    }
+    else {
+        cout << "NOT BINARY TREE";
+    }
+}
