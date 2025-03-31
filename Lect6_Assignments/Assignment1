@@ -1,0 +1,163 @@
+#include <iostream>
+
+using namespace std;
+
+class node { //Khởi tạo node của tree
+public:
+    int data; //Giá trị của node
+	node* left; //Con trỏ trái
+	node* right; //Con trỏ phải
+    node(int value) { //constructor tạo node
+        data = value;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+class tree {
+public:
+    node* root; //Tạo root của tree
+	tree() { //constructor tạo tree
+        root = nullptr;
+    }
+	void insert(int& value) { //Hàm thêm node vào tree
+        node* newnode = new node(value);
+		if (root == nullptr) { //Nếu tree rỗng thì node mới là root
+            root = newnode;
+            return;
+        }
+        node* travel = root; //Biến chạy để duyệt tree
+		node* tmp = travel; //Biến lưu lại vị trí cha của node mới
+        while (travel!=nullptr) { //Vòng lặp duyệt tree
+			if (newnode->data > travel->data) { //Nếu giá trị của node mới lớn hơn giá trị của node hiện tại thì duyệt sang phải
+				tmp = travel; //Lưu lại vị trí cha của node mới
+				travel = travel->right; //Duyệt sang phải
+            }
+            else {
+				tmp = travel; //Lưu lại vị trí cha của node mới
+				travel = travel->left; //Duyệt sang trái
+            }
+        }
+		if (newnode->data > tmp->data) { //Thêm vào bên phải nếu giá trị của node mới lớn hơn
+			tmp->right = newnode; //Thêm vào bên phải
+		}
+		else {
+			tmp->left = newnode; //Thêm vào bên trái
+		}
+    }
+	void del(int& value) { //Hàm xóa node khỏi tree
+		if (root == nullptr) { //Tree rỗng thì return
+			return;
+		}
+		node* travel = root; //Biến chạy để duyệt tree
+		node* parent = nullptr; //Biến lưu lại vị trí cha của node cần xóa
+		node* footprint = nullptr; //Biến lưu lại vị trí node cần xóa
+		while (travel != nullptr) { //Vòng lặp duyệt tree
+            if(value > travel->data) {
+				parent = travel;
+                travel = travel->right;
+            }
+            else if (value < travel->data) {
+				parent = travel;
+                travel = travel->left;
+            }
+            else {
+				footprint = travel; //Duyệt đến vị trí node cần xóa thì lưu lại
+                break;
+            }
+        }
+		if (travel == nullptr) { //Nếu không tìm thấy node cần xóa => return
+			return;
+		}
+		if (travel->right == nullptr && travel->left == nullptr) { //Nếu node cần xóa không có con => xóa node đó
+            if (travel == root) { //Nếu node cần xóa là root
+                root = nullptr;
+				delete travel;
+                return;
+            }
+			if (parent->right == travel) { //Kiểm tra xem travel là con trái hay phải của parent
+				parent->right = nullptr;
+			}
+			else {
+				parent->left = nullptr;
+			}
+			delete travel;
+		}
+		else if (travel->right == nullptr||travel->left==nullptr) { //Nếu node cần xóa có 1 con
+			if (parent == nullptr) { //Nếu node cần xóa là root
+				if (travel->right != nullptr) { //Kiểm tra xem con ở bên trái hay phải
+					root = travel->right;
+				}
+				else {
+					root = travel->left;
+				}
+				delete travel;
+				return;
+			}
+            if (travel->right != nullptr) { //Nếu node cần xóa có con bên phải
+                if (parent->right == travel) { //Kiểm tra xem node cần xóa là con bên nào của parent
+                    parent->right = travel->right;
+                }
+                else {
+                    parent->left = travel->right;
+                }
+            }
+			if (travel->left != nullptr) { //Nếu node cần xóa có con bên trái
+				if (parent->right == travel) { //Kiểm tra xem node cần xóa là con bên nào của parent
+					parent->right = travel->left;
+				}
+				else {
+					parent->left = travel->left;
+				}
+			}
+            delete travel;
+        }else { //Nếu node cần xóa có 2 con
+            node* tmp = travel; //Biến tmp để lưu cha của node bên trái ngoài cùng nhánh phải
+            travel = travel->right; //Cho sang nhánh phải
+            while (travel->left != nullptr) { //Duyệt tree sang nhánh trái
+                tmp = travel;
+                travel = travel->left;
+            }
+			footprint->data = travel->data; //Thay giá trị node cần xóa thành giá trị node cuối cùng bên trái ngoài cùng nhánh phải
+			tmp->left = nullptr; //Xóa node cuối cùng bên trái ngoài cùng nhánh phải
+            delete travel;
+        }
+    }
+	void inorder(node* root) { //Hàm in tree theo thứ tự inorder
+		if (root == nullptr) {
+			return;
+		}
+		inorder(root->left);
+		cout << root->data << " ";
+		inorder(root->right);
+    }
+};
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+    tree t;
+    while (1) {
+        cout << "Chon thao tac: \n1. Them node\n2. Xoa node\n3. In cay\n";
+        int choice; cin >> choice;
+        if (choice == 1) {
+            cout << "Nhap so node muon them: ";
+            int n; cin >> n;
+            while (n--) {
+                int x; cin >> x;
+                t.insert(x);
+            }
+        }
+        else if (choice == 2) {
+            cout << "Nhap so node muon xoa: ";
+            int n; cin >> n;
+            while (n--) {
+                int x; cin >> x;
+                t.del(x);
+            }
+        }
+        else if (choice == 3) {
+            cout << "In cay: ";
+            t.inorder(t.root);
+        }
+    }
+}
