@@ -1,0 +1,17 @@
+#include <iostream>
+
+using namespace std;
+
+int gcd(int n, int m) {//Tính ước số chung lớn nhất của 2 số nguyên dương n và m
+	if (m == 0) return n;//điều kiện dừng
+	if (n == 0) return m;//điều kiện dừng
+	if (m == n) return m;//điều kiện dừng
+	return gcd(m % n, n);//đệ quy, ta có cthuc: m = k*n + r, với k là số nguyên dương, r là số dư
+}						 // => gcd(m,n) = gcd(n, r) với r < n, và m > n. Ở đây e gọi đệ quy đảo ngược thứ tự m,n => xử lý TH m < n
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n, m;
+	cin >> n >> m;
+	cout << gcd(n, m);
+}
