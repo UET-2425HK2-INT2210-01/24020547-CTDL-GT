@@ -1,0 +1,105 @@
+#include <iostream>
+#define null 10000000
+using namespace std;
+
+int a[1000]; //Mảng lưu giá trị của các node
+
+class tree {
+public:
+    int tail = 0, root = 0; //khởi tạo rễ và phần tử ngoài cùng của cây
+	tree() { //constructor khởi tạo
+        a[tail] = 0;
+        a[root] = -null;
+    }
+	void insert(int x) { //Thêm node vào cây
+		if (a[root] == -null) { //Nếu cây rỗng thì gán giá trị cho rễ
+            a[root] = x;
+            return;
+        }
+        int tmp = tail; //đặt biến tmp = tail để thêm node ở vị trí tail+1
+        ++tmp;
+        a[tmp] = x; //thêm node
+		if (tmp % 2 == 0) { //heapify up khi node được thêm vào vị trí chẵn
+            while (a[tmp] < a[(tmp - 2) / 2] && tmp >= 0) {
+                swap(a[tmp], a[(tmp - 2) / 2]);
+                tmp = (tmp - 2) / 2;
+            }
+        }
+        else {
+			while (a[tmp] < a[tmp / 2] && tmp >= 0) { //heapify up khi node được thêm vào vị trí lẻ
+                swap(a[tmp], a[tmp / 2]);
+                tmp /= 2;
+            }
+        }
+		++tail; //cập nhật tail
+    }
+    void del(int x) { //xóa node
+		int pos = -1; //biến lưu vị trí của node cần xóa
+		for (int i = 0; i <= tail; ++i) { //duyệt mảng để tìm vị trí của node cần xóa
+            if (a[i] == x) {
+                pos = i;
+                break;
+            }
+        }
+		if (pos == -1) { //nếu không tìm thấy node cần xóa thì return
+            return;
+        }
+		swap(a[pos], a[tail]); //đổi chỗ node cần xóa với node cuối cùng
+        a[tail] = 0; //xóa node, ở đây là gán tạm về 0
+		while (1) { //thực hiện heapify down
+			int smallest = pos; //biến lưu vị trí nhỏ nhất
+            int left = (pos * 2) + 1;
+            int right = (pos * 2) + 2;
+			if (a[left] < a[smallest] && left < tail) { //nếu node bên trái nhỏ hơn node cha thì cập nhật smallest
+                smallest = left;
+            }
+			if (a[right] < a[smallest] && right < tail) { //nếu node bên phải nhỏ hơn node cha thì cập nhật smallest
+                smallest = right;
+            }
+            if (smallest != pos) {
+				swap(a[smallest], a[pos]); //đổi chỗ node cha với node nhỏ nhất
+				pos = smallest; //cập nhật vị trí của node cha
+            }
+            else {
+                break;
+            }
+        }
+        --tail;
+    }
+	void preorder(int i) { //duyệt cây theo preorder
+        if (i > tail) return; //điều kiện dừng
+        cout << a[i] << " ";
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        preorder(left);
+        preorder(right);
+    }
+};
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+    tree t;
+    while (1) {
+        cout << "Chon thao tac: \n1. Them node\n2. Xoa node\n3. In cay\n";
+        int choice; cin >> choice;
+        if (choice == 1) {
+            cout << "Nhap so node muon them: ";
+            int n; cin >> n;
+            while (n--) {
+                int x; cin >> x;
+                t.insert(x);
+            }
+        }
+        else if (choice == 2) {
+            cout << "Nhap so node muon xoa: ";
+            int n; cin >> n;
+            while (n--) {
+                int x; cin >> x;
+                t.del(x);
+            }
+        }
+        else if (choice == 3) {
+            cout << "In cay: ";
+            t.preorder(0);
+        }
+    }
+}
