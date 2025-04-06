@@ -1,0 +1,20 @@
+#include <iostream>
+
+using namespace std;
+
+void binnum(string s, int n) { //hàm in ra all binary number
+	if (s.size() == n) { //điều kiện dừng nếu string = size
+		cout << s << "\n";
+		return;
+	}
+	binnum(s + '0', n); //tư duy thay số vào string, với mỗi vị trí thì ta sẽ thử giá trị 0 và 1
+	binnum(s + '1', n); //nếu xong 1 lần thì ta quay lại bước trước đấy và thay giá trị khác vào
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n;
+	cin >> n;
+	string s = "";
+	binnum(s, n);
+}
