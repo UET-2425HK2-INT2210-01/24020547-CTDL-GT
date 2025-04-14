@@ -1,0 +1,15 @@
+#include <iostream>
+
+using namespace std;
+
+int ans(int n) { //hàm tính tổng chữ số
+	if (n == 0) return 0; //đk dừng, nếu n = 0
+	return n%10 + ans(n/10); //đệ quy, mỗi bước sẽ lấy chữ số hàng đơn vị của n + hàng đơn vị của n/10
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n;
+	cin >> n;
+	cout << ans(n);
+}
