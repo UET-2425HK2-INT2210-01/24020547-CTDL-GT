@@ -1,0 +1,27 @@
+#include <iostream>
+
+using namespace std;
+
+void reverse(int n, int a[], int &k) {//hàm đảo ngược
+	if (n==0) return;
+	a[k++] = n % 10; //cập nhật pthu a[k] = n%10, sau đó k++
+	reverse(n / 10, a, k); //đệ quy với n/=10
+}
+void print(int a[], int n) { //hàm in
+	for (int i = 0; i < n; ++i) {
+		cout << a[i];
+	}
+}
+int size(int n) { //hàm độ dài số
+	if (n == 0) return 0;
+	return 1 + size(n / 10);
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n, k = 0;
+	cin >> n;
+	int* a = new int[size(n)];
+	reverse(n, a, k);
+	print(a, size(n));
+}
