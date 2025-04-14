@@ -2,15 +2,14 @@
 
 using namespace std;
 
-int ans(int n, int &count) {//hàm đếm
+int ans(int n) {//hàm đếm
 	if (n == 0) return 0; //đk dừng, nếu n = 0 thì dừng đệ quy
-	ans(n/10, count); //mỗi lần đệ quy thì n/=10
-	return ++count; //cập nhật biến đếm count
+	return 1 + ans(n/10); //đệ quy, mỗi bước n/10 sẽ cộng 1
 }
 
 int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
 {
-	int count = 0, n;
+	int n;
 	cin >> n;
-	cout << ans(n, count);
+	cout << ans(n);
 }
