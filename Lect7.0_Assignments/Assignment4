@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+int ans(int x, int n) {//hàm tìm lũy thừa
+	if (n == 0) return 1;
+	if (n % 2 != 0) return x * ans(x, n / 2) * ans(x, n / 2); //TH mũ lẻ
+	else return ans(x, n / 2) * ans(x, n / 2); //TH mũ chẵn
+
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int x, n;
+	cin >> x >> n;
+	double tmp = ans(x, abs(n));
+	if (n < 0) cout << 1 / tmp; //nếu mũ âm thì đảo ngược lại
+	else cout << tmp;
+}
