@@ -1,0 +1,33 @@
+#include <iostream>
+
+using namespace std;
+
+void permutation(int n, int k, bool b[], int a[]) { //hàm sinh hoán vị
+	if (k == n) { //nếu biến đếm k = n thì in kq
+		for (int i = 0; i < n; ++i) {
+			cout << a[i] << " ";
+		}
+		cout << "\n";
+		return;
+	}
+	for (int i = 1; i <= n; ++i) {
+		if (!b[i]) { //ktra xem ptu đã được dùng chưa
+			a[k] = i; //nếu chưa thì dùng ptu
+			b[i] = 1; //cập nhật đã dùng
+			permutation(n, k + 1, b, a); //đệ quy, với biến đếm dc tăng lên
+			b[i] = 0; //sau khi xong 1 hoán vị thì cập nhật lại chưa dùng để cbi cho hoán vị khác
+		}
+	}
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n, k = 0; //tạo biến input n và biến đếm k
+	cin >> n;
+	bool* b = new bool[n+1]; //tạo mảng bool để ktra xem đã dùng ptu nào rồi
+	for (int i = 0; i <= n; ++i) { //vòng lặp để khởi tạo mảng bool = false
+		b[i] = 0;
+	}
+	int* a = new int[n]; //tạo mảng a để lưu hoán vị
+	permutation(n, k, b, a);
+}
