@@ -1,0 +1,15 @@
+#include <iostream>
+
+using namespace std;
+
+int ans(int n) {//hàm tính giai thừa
+	if (n == 1) return 1; //điều kiện dừng khi tính xong giai thừa từ 1 đến n
+	return n*ans(n-1); //đệ quy, trả về n * đệ quy (n-1)
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n;
+	cin >> n;
+	cout << ans(n);
+}
