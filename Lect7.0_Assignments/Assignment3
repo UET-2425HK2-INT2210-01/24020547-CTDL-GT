@@ -1,0 +1,16 @@
+#include <iostream>
+
+using namespace std;
+
+int ans(int n) {//hàm tìm fibonacci
+	if (n == 1) return 1; //điều kiện dừng
+	if (n == 0) return 0; //điều kiện dừng
+	return ans(n-2)+ans(n-1); //đệ quy, công thức fibonacci
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n;
+	cin >> n;
+	cout << ans(n);
+}
