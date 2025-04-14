@@ -1,0 +1,16 @@
+#include <iostream>
+
+using namespace std;
+
+int ans(int n, int &count) {//hàm đếm
+	if (n == 0) return 0; //đk dừng, nếu n = 0 thì dừng đệ quy
+	ans(n/10, count); //mỗi lần đệ quy thì n/=10
+	return ++count; //cập nhật biến đếm count
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int count = 0, n;
+	cin >> n;
+	cout << ans(n, count);
+}
