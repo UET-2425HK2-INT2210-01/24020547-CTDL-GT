@@ -1,0 +1,57 @@
+#include <iostream>
+
+using namespace std;
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	freopen("input.txt", "r", stdin); //nhập xuất file
+	freopen("output.txt", "w", stdout);
+	int m, n; // m: số hàng, n: số cột
+	cin >> m >> n;
+	int** a = new int* [m]; //tạo mảng động
+	for (int i = 0; i < m; i++)
+	{
+		a[i] = new int[n];
+		for (int j = 0; j < n; j++)
+		{
+			cin >> a[i][j]; //nhập mảng động
+		}
+	}
+	int maxsumall = a[0][0]; //tạo biến maxsumall: max sum cần tìm
+	int finaltopx = 0, finaltopy = 0, finalbottomx = 0, finalbottomy = 0; //finaltopx = c1; finaltopy = r1; finalbottomx = c2; finalbottomy = r2 
+	for (int i = 0; i < m; ++i) { //Sử dụng thuật toán Kadane: Cộng các hàng của ma trận, đưa về mảng 1 chiều, rồi từ mảng 1 chiều chạy tìm max sum mỗi lần đưa 2D về 1D
+		int* tmp = new int[n]; //Ma trận 1D tmp để lưu tổng từng phân tử theo cột
+		for (int i = 0; i < n; ++i) {
+			tmp[i] = 0; //khởi tạo gtri ban đầu của mảng tmp = 0
+		}
+		for (int k = i; k < m; ++k) {
+			for (int j = 0; j < n; ++j) {
+				tmp[j] += a[k][j]; //tính tổng từng cột theo chiều dọc, theo prefix sum
+			}
+			int sum = tmp[0], maxsumtmp = tmp[0]; //biến sum để tính các tổng xảy ra, maxsumtmp để lưu max sum mỗi mảng 1D tmp
+			int start = 0, toptmp = 0, bottomtmp = 0;
+			for (int i = 1; i < n; ++i) {
+				if (tmp[i] + sum < tmp[i]) { //Nếu tổng của tmp[i] + sum < tmp[i] thì gán lại sum = tmp[i], start = i
+					sum = tmp[i];
+					start = i;
+				}
+				else {
+					sum += tmp[i]; //Ngược lại thì cộng dồn sum với tmp[i]
+				}
+				if (maxsumtmp < sum) { //Kiểm tra xem maxsumtmp có nhỏ hơn sum không, nếu có thì cập nhật
+					maxsumtmp = sum;
+					toptmp = start; //lưu vị trí bắt đầu
+					bottomtmp = i; //lưu vị trí kết thúc
+				}
+			}
+			if (maxsumtmp > maxsumall) { //So sánh tổng từng mảng 1D với maxsumall
+				maxsumall = maxsumtmp; //Nếu maxsumtmp lớn hơn maxsumall thì cập nhật lại maxsumall
+				finaltopx = toptmp; //cập nhật các giá trị 
+				finaltopy = i;
+				finalbottomx = bottomtmp;
+				finalbottomy = k;
+			}
+		}
+	}
+	cout << finaltopy+1 << " " << finaltopx+1 << " " << finalbottomy+1 << " " << finalbottomx+1 << " " << maxsumall;
+}
