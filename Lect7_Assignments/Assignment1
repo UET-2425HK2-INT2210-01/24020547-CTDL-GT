@@ -38,12 +38,12 @@ void mergesort(int a[], int l, int r) { //hàm mergesort để chia
 
 int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
 {
-	int n;
-	cout << "Nhập số phần tử \n";
-	cin >> n;
-	int *a = new int[n];
-	for (int i = 0; i < n; ++i) {
-		cin >> a[i];
+    freopen("numbers.txt", "r", stdin);      // Nhập từ file
+    freopen("numbers.sorted", "w", stdout);  // Xuất ra file
+	int *a = new int[1000];
+	int n = 0;
+	while(cin >> a[n]){
+	n++;
 	}
 	mergesort(a, 0, n-1);
 	for (int i = 0; i < n; ++i) {
