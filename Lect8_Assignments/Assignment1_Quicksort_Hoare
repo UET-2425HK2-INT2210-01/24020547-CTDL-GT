@@ -1,1 +1,42 @@
 
+#include <iostream>
+
+using namespace std;
+
+int partition(int a[], int left, int right) { //hàm phân vùng mảng + sắp xếp
+	int pivot = a[left]; //chọn phần tử đầu tiên làm pivot
+	int i = left - 1; //biến i là chỉ số của phần tử nhỏ hơn pivot
+	int j = right + 1; //biến j là chỉ số của phần tử lớn hơn pivot
+	while (1) { //vòng lặp vô hạn cho đến khi tìm được vị trí của pivot
+		do {
+			i++;
+		} while (a[i] < pivot); //tìm phần tử đầu tiên lớn hơn hoặc bằng pivot
+		do {
+			j--;
+		} while (a[j] > pivot); //tìm phần tử cuối cùng nhỏ hơn hoặc bằng pivot
+		if (i >= j) return j; //nếu i >= j thì đã tìm được vị trí của pivot
+		swap(a[i], a[j]); //hoán đổi vị trí của 2 phần tử
+	}
+}
+
+void quicksort(int a[], int left, int right) { //hàm quicksort chia đôi mảng
+	if (left < right) { //nếu mảng có nhiều hơn 1 phần tử
+		int pivot = partition(a, left, right); //tìm vị trí của phần tử pivot
+		quicksort(a, left, pivot - 1); //sắp xếp phần bên trái của pivot
+		quicksort(a, pivot + 1, right); //sắp xếp phần bên phải của pivot
+	}
+}
+
+int main() //Thực hiện xử lý input và đưa ra output theo yêu cầu
+{
+	int n;
+	cin >> n;
+	int* a = new int[n];
+	for (int i = 0; i < n; ++i) {
+		cin >> a[i];
+	}
+	quicksort(a, 0, n-1);
+	for (int i = 0; i < n; ++i) {
+		cout << a[i] << " ";
+	}
+}
