@@ -22,7 +22,7 @@ int partition(int a[], int left, int right) { //hàm phân vùng mảng + sắp 
 void quicksort(int a[], int left, int right) { //hàm quicksort chia đôi mảng
 	if (left < right) { //nếu mảng có nhiều hơn 1 phần tử
 		int pivot = partition(a, left, right); //tìm vị trí của phần tử pivot
-		quicksort(a, left, pivot - 1); //sắp xếp phần bên trái của pivot
+		quicksort(a, left, pivot); //sắp xếp phần bên trái của pivot
 		quicksort(a, pivot + 1, right); //sắp xếp phần bên phải của pivot
 	}
 }
