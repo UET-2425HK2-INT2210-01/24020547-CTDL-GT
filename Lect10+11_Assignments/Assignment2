@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+void bfs(int x, int y, int n, vector<bool> &visited, vector<vector<int>> &adj) {
+	visited[x] = true; //đánh dấu đỉnh đầu tiên là đã thăm
+	vector<int> dist(n+1, 0); //tạo vector path để lưu trữ số đường đi
+	queue<int> q; //tạo queue để duyệt BFS
+	q.push(x); //thêm đỉnh đầu tiên vào queue
+	while (!q.empty()) { //duyệt queue
+		int current = q.front();
+		q.pop();
+		for (int i = 0; i < adj[current].size(); ++i) { //duyệt từng đỉnh kề
+			int neighbor = adj[current][i];
+			if (!visited[neighbor]) {
+				visited[neighbor] = true; //đánh dấu đã thăm
+				dist[neighbor] = dist[current] + 1; //cập nhật độ dài đường đi
+				q.push(neighbor);
+			}
+		}
+	}
+	cout << dist[y] << endl; //in ra độ dài đường đi từ x đến y
+}
+
+int main() //Xử lý đầu vào
+{
+	int n, m, x, y, count = 0;
+	cin >> n >> m >> x >> y;
+	vector<bool> visited(n + 1, false); //tạo vector visited kiểm tra xem đã thăm node chưa
+	vector<vector<int>> adj(n + 1); //tạo vector adj để lưu trữ các đỉnh kề
+	while (m--) { //xử lý đầu vào
+		int a, b;
+		cin >> a >> b;
+		adj[a].push_back(b); //thêm đỉnh b vào danh sách kề của a
+	}
+	bfs(x, y, n, visited, adj); //in ra số dg đi ngắn nhất từ x đến y
+}
