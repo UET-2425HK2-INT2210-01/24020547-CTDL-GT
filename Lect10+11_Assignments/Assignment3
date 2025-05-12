@@ -1,0 +1,94 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+int inf = 1000000;
+
+using namespace std;
+
+void floyd(vector<vector<int>> &dist) {
+	for (int k = 1; k < dist.size(); k++) {
+		for (int i = 1; i < dist.size(); i++) {
+			for (int j = 1; j < dist.size(); j++) {
+				if (dist[i][j] > dist[i][k] + dist[k][j]) { //nếu distance từ đỉnh i đến j trc đấy lớn hơn distance đi từ i đến j qua trung gian k thì cập nhật
+					dist[i][j] = dist[i][k] + dist[k][j];
+				}
+			}
+		}
+	}
+	for (int i = 1; i < dist.size(); i++) {
+		for (int j = 1; j < dist.size(); j++) {
+			if (dist[i][j] == inf) { //Nếu ko có dg đi thì in ra inf
+				cout << "INF ";
+			}
+			else {
+				cout << dist[i][j] << " "; //ngc lại thì in ra bthg
+			}
+		}
+		cout << "\n";
+	}
+}
+
+class edge { //tạo class edge để dễ lưu dữ liệu của 1 cạnh
+public:
+	int start, end, weight;
+};
+
+void bellman_ford(vector<edge> edges, int s, int t) {
+	vector<int> dist(edges.size()+1, inf); //tạo vector distance để lưu độ dài từ đỉnh s đến đỉnh bất kì
+	dist[s] = 0; //distance từ s tới chính nó = 0
+	vector<int> parent(edges.size() + 1, -1); //tạo vector parent để truy vết
+	for (int i = 0; i < edges.size(); ++i) { //cho chạy n-1 lần
+		for (int j = 0; j < edges.size(); ++j) { //mỗi lần của n-1 lần trên thì lại duyệt hết qua các đỉnh
+			if (dist[edges[j].start] != inf && dist[edges[j].end] > dist[edges[j].start] + edges[j].weight) {
+				dist[edges[j].end] = dist[edges[j].start] + edges[j].weight; //cập nhật distance của đỉnh đích
+				parent[edges[j].end] = edges[j].start; //cập nhật parent của đỉnh đích
+			}
+		}
+	}
+	bool check = true;
+	for (int j = 0; j < edges.size(); ++j) {
+		if (dist[edges[j].start] != inf && dist[edges[j].end] > dist[edges[j].start] + edges[j].weight) { //chạy xong n-1 lần mà vẫn cập nhật dc thêm => chu trình âm
+			check = false;
+			break;
+		}
+	}
+	vector<int> path;
+	if (check) {
+		cout << dist[t] << "\n";
+		while (t != -1) {
+			path.push_back(t);
+			t = parent[t];
+		}
+		reverse(path.begin(), path.end()); //đảo ngược lại vector path để in ra đường đi từ s đến t
+		for (int i = 0; i < path.size(); ++i) {
+			cout << path[i] << " ";
+		}
+		cout << "\n";
+	}
+	else {
+		cout << "Chu trinh am\n";
+	}
+}
+
+int main() //Xử lý đầu vào
+{
+	int n, m, s, e;
+	cin >> n >> m >> s >> e;
+	vector<vector<int>> dist(n+1, vector<int>(n+1, inf)); //Tạo vector distance cho floyd
+	vector<edge> edges(m); //Tạo vector lưu cạnh cho bellman-ford
+	for (int i = 1; i <= n; i++) {
+		dist[i][i] = 0; //đặt dg đi từ 1 đỉnh đến chính nó bằng 0 (dùng cho floyd)
+	}
+	int tmp = 0;//biến đếm tạm, để đánh số edge cho bellman-ford
+	while (m--) {
+		int u, v, d;
+		cin >> u >> v >> d;
+		dist[u][v] = d; //cập nhật distance từ 2 đỉnh cho floyd
+		edges[tmp].start = u; //cập nhật đỉnh xuất phát cho bellman-ford
+		edges[tmp].end = v;//cập nhật đỉnh kết cho bellman-ford
+		edges[tmp].weight = d; //cập nhật trọng số cho bellman-ford
+		++tmp;
+	}
+	bellman_ford(edges, s, e); //gọi bellman-ford cho ý a
+	floyd(dist); //gọi floyd cho ý b
+}
