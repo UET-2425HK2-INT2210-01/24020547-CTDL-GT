@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdio>
+
+using namespace std;
+
+struct Edge { // Lưu thông tin của một cạnh: nối từ u -> v với trọng số w
+    int u, v, w; // Sắp xếp cạnh theo trọng số tăng dần để áp dụng thuật toán Kruskal
+    bool operator<(const Edge& other) const {
+        return w < other.w;
+    }
+};
+
+vector<int> parent; // Mảng lưu cha (cha của mỗi đỉnh trong cây)
+
+vector<int> rank_set; // Mảng lưu rank (độ sâu ước lượng của cây con trong DSU)
+
+int find(int u) { // Hàm tìm cha đại diện (kèm path compression)
+    if (parent[u] != u)
+        parent[u] = find(parent[u]); // nén đường đi
+    return parent[u];
+}
+
+bool unite(int u, int v) { // Hàm hợp nhất 2 tập hợp u và v (nếu chưa thuộc cùng một cây)
+    int root_u = find(u);
+    int root_v = find(v);
+    if (root_u == root_v) return false; // Nếu cùng một cây, bỏ qua
+    if (rank_set[root_u] < rank_set[root_v]) { // Nối cây thấp vào cây cao để giữ cây phẳng
+        parent[root_u] = root_v;
+    }
+    else if (rank_set[root_u] > rank_set[root_v]) {
+        parent[root_v] = root_u;
+    }
+    else {
+        parent[root_v] = root_u;
+        rank_set[root_u]++;
+    }
+    return true;
+}
+
+int main() {
+    freopen("connection.txt", "r", stdin);
+    freopen("connection.out", "w", stdout);
+    int n, m;
+    cin >> n >> m;
+    vector<Edge> edges(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> edges[i].u >> edges[i].v >> edges[i].w;
+    }
+    sort(edges.begin(), edges.end()); // Sắp xếp cạnh theo trọng số tăng dần
+    // Khởi tạo DSU: mỗi đỉnh là cha của chính nó
+    parent.resize(n + 1);
+    rank_set.resize(n + 1, 0);
+    for (int i = 1; i <= n; ++i)
+        parent[i] = i;
+    int total_cost = 0; // Tổng chi phí
+    vector<Edge> mst;   // Danh sách cạnh trong cây khung nhỏ nhất
+    for (Edge& e : edges) { // Duyệt từng cạnh theo thứ tự tăng dần trọng số
+        if (unite(e.u, e.v)) { // Nếu nối được (không tạo chu trình)
+            total_cost += e.w; // Cộng thêm chi phí
+            mst.push_back(e);  // Lưu lại cạnh vào MST
+        }
+    }
+    cout << total_cost << '\n';
+    for (Edge& e : mst) {
+        cout << e.u << ' ' << e.v << ' ' << e.w << '\n';
+    }
+    return 0;
+}
