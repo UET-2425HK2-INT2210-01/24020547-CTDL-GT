@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+int inf = 1000000;
+
+using namespace std;
+
+void dfs(int u, vector<bool> &visited, vector<vector<int>> &adj, stack<int> &s) {
+	visited[u] = true;
+	for (int v : adj[u]) {
+		if(!visited[v]){
+			dfs(v, visited, adj, s);
+		}
+	}
+	s.push(u); // Đẩy đỉnh vào stack sau khi đã duyệt hết các đỉnh kề
+}
+
+int main() //Xử lý đầu vào
+{
+	int n, m;
+	cin >> n >> m;
+	vector<vector<int>> adj(n + 1); // Đồ thị sử dụng danh sách kề
+	vector<bool> visited(n + 1, false); // Mảng visited để đánh dấu các đỉnh đã được duyệt
+	stack<int> s; //stack để push các đỉnh sau khi duyệt xong
+	while (m--) {
+		int u, v;
+		cin >> u >> v;
+		adj[u].push_back(v); //cập nhật v là đỉnh kề của u
+	}
+	for (int i = 1; i <= n; i++) { //duyệt dfs
+		if (!visited[i]) { //nếu chưa thăm thì duyệt
+			dfs(i, visited, adj, s);
+		}
+	}
+	while (!s.empty()) { //in ra kết quả
+		cout << s.top() << " ";
+		s.pop();
+	}
+}
