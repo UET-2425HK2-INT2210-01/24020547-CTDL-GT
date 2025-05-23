@@ -17,7 +17,9 @@ void dfs(int u, vector<bool> &visited, vector<vector<int>> &adj, stack<int> &s) 
 }
 
 int main() //Xử lý đầu vào
-{
+{	
+	freopen("connection.txt", "r", stdin);
+    	freopen("connection.out", "w", stdout);
 	int n, m;
 	cin >> n >> m;
 	vector<vector<int>> adj(n + 1); // Đồ thị sử dụng danh sách kề
